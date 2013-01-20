@@ -33,6 +33,7 @@ public class JeaIRC implements Runnable{
 	private volatile boolean quit = false;
 	private volatile boolean printOutput = false;
 	private Server server;
+	private long bufferTime = 500000000;
 	
 	/**
 	 * Creates a new IRC instance
@@ -196,13 +197,21 @@ public class JeaIRC implements Runnable{
 	 */
 	private synchronized void sendBuffer(){
 		long curTime = System.nanoTime();
-		if (curTime - bufferTimer > 500000000){
+		if (curTime - bufferTimer > bufferTime){
 			bufferTimer = curTime;
 			if (messageBuffer.size() > 0){
 				output.println(messageBuffer.poll());
 				output.flush();
 			}
 		}
+	}
+	
+	/**
+	 * Changes the time the client waits to send messages if you spam them
+	 * @param newTime the new time (in nanoseconds)
+	 */
+	public void setBufferTime(int newTime){
+		bufferTime = newTime;
 	}
 	
 	/**
