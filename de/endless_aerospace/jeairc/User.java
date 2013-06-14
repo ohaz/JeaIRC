@@ -145,4 +145,17 @@ public class User implements Participant{
 	public String getHost(){
 		return host;
 	}
+	
+	@Override
+	public boolean equals(Object o){
+		if (o == null){
+			return false;
+		}
+		if (o instanceof User){
+			if (((User) o).getAuthString().equals(this.getAuthString())){
+				return true;
+			}
+		}
+		return false;
+	}
 }

@@ -28,12 +28,12 @@ public class JeaIRC implements Runnable{
 	private BufferedReader input;
 	private Socket connection;
 	private boolean authSent = false;
-	private long bufferTimer = System.nanoTime();
+	private long bufferTimer = System.currentTimeMillis();
 	private MessageReceivable receiver;
 	private volatile boolean quit = false;
 	private volatile boolean printOutput = false;
 	private Server server;
-	private long bufferTime = 500000000;
+	private long bufferTime = 1000;
 	
 	/**
 	 * Creates a new IRC instance
@@ -140,13 +140,18 @@ public class JeaIRC implements Runnable{
 						auth();
 						message.replace("\r", "");
 						parser.receive(message);
-						println(message);
+						println(message);				
 					}
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				sendBuffer();
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e){
+					continue;
+				}
 			}
 			try {
 				connection.close();
@@ -183,7 +188,6 @@ public class JeaIRC implements Runnable{
 			}
 			println(">> Sending USER/NICK");
 			println("NICK: "+nick+"\nUSER: "+user);
-			//output.println("NICK "+nick+"\r");
 			output.println("USER "+user+"\r");
 			output.println("NICK "+nick+"\r");
 			output.flush();
@@ -196,7 +200,7 @@ public class JeaIRC implements Runnable{
 	 * Throttles connection if it sends too many lines.
 	 */
 	private synchronized void sendBuffer(){
-		long curTime = System.nanoTime();
+		long curTime = System.currentTimeMillis();
 		if (curTime - bufferTimer > bufferTime){
 			bufferTimer = curTime;
 			if (messageBuffer.size() > 0){

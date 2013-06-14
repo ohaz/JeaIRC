@@ -30,6 +30,10 @@ public class Server implements Participant {
 		if (!chanList.contains(chan)){
 			chanList.add(chan);
 		}
+		//TODO: This part. Might be useless. Just for RAM-testing
+		if (chanList.size() > 20){
+			chanList.remove(chanList.size()-1);
+		}
 	}
 	
 	/**

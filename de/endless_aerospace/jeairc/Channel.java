@@ -76,7 +76,7 @@ public class Channel implements Participant{
 			return false;
 		}
 		if (o instanceof Channel){
-			if (o.toString().equals(this.toString())){
+			if (((Channel) o).toString().equals(this.toString())){
 				return true;
 			}
 		}
