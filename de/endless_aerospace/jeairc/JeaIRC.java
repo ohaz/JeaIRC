@@ -140,7 +140,7 @@ public class JeaIRC implements Runnable{
 						auth();
 						message.replace("\r", "");
 						parser.receive(message);
-						println(message);		
+						println(message);
 					}
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
